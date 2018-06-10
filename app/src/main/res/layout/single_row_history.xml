@@ -42,12 +42,12 @@
                 android:orientation="horizontal">
                 <TextView
                     android:textColor="@color/colorPrimary"
-                    android:text="Keterangan Hutang: "
+                    android:text="Keterangan: "
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
-                    android:id="@+id/keteranganHutang"
-                    android:text="Nama"
+                    android:id="@+id/keteranganHistory"
+                    android:text="Keterangan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -59,17 +59,47 @@
                 android:orientation="horizontal">
                 <TextView
                     android:textColor="@color/colorPrimary"
-                    android:text="Banyaknya Hutang: "
+                    android:text="Banyaknya Pengeluaran/Pemasukan: "
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
-                    android:id="@+id/banyaknyaHutang"
+                    android:id="@+id/banyaknyaHistory"
                     android:text="Isi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:textColor="@color/colorPrimary"
+                    android:text="Jenis: "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/jenisHistory"
+                    android:text="Keluar/masuk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:textColor="@color/colorPrimary"
+                    android:text="Sumber/Tujuan Dana: "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/dariMana"
+                    android:text="Keluar/masuk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
         </LinearLayout>
 

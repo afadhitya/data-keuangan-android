@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class HistoryKeuanganClass {
     private int idHistory;
-    private Date tanggalHistory;
+    private String tanggalHistory;
     private String hariHistory;
     private String keteranganHistory;
     private String masukAtauKeluar;
@@ -22,11 +22,11 @@ public class HistoryKeuanganClass {
         this.idHistory = idHistory;
     }
 
-    public Date getTanggalHistory() {
+    public String getTanggalHistory() {
         return tanggalHistory;
     }
 
-    public void setTanggalHistory(Date tanggalHistory) {
+    public void setTanggalHistory(String tanggalHistory) {
         this.tanggalHistory = tanggalHistory;
     }
 
