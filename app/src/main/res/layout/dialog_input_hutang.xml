@@ -10,27 +10,27 @@
         android:id="@+id/dialogTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nama Penyimpanan"
+        android:text="Keterangan Hutang"
         android:textAppearance="?android:attr/textAppearanceLargePopupMenu" />
 
     <EditText
-        android:id="@+id/inputPenyimpananNama"
+        android:id="@+id/inputKeteranganHutang"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Masukan Nama Jenis Penyimpanan"
+        android:hint="Masukan Keterangan Hutang"
         android:inputType="textCapWords" />
 
     <TextView
         android:id="@+id/dialogTitle2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Isi Pertama"
+        android:text="Banyaknya Hutang"
         android:textAppearance="?android:attr/textAppearanceLargePopupMenu" />
 
     <EditText
-        android:id="@+id/inputPenyimpananAmount"
+        android:id="@+id/inputHutangAmount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Masukan jumlah isi pertama "
+        android:hint="Masukan Banyakya Hutang "
         android:inputType="text" />
 </LinearLayout>

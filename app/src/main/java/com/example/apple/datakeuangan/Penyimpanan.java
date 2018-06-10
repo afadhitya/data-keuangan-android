@@ -25,15 +25,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Penyimpanan extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, MyRecyclerViewClickRefreshAdapter.ItemClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, PenyimpananMyRecyclerViewAdapter.ItemClickListener {
     final Context c = this;
     DBControllerPenyimpanan controller;
     private SQLiteDatabase db = null;
 
-    private MyRecyclerViewClickRefreshAdapter adapter;
+    private PenyimpananMyRecyclerViewAdapter adapter;
     RecyclerView recyclerView;
 
     @Override
@@ -47,6 +46,8 @@ public class Penyimpanan extends AppCompatActivity
         controller = new DBControllerPenyimpanan(this, "", null, 1);
 
         showData();
+
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -111,9 +112,14 @@ public class Penyimpanan extends AppCompatActivity
     public void showData(){
         ArrayList<PenyimpananClass> penyimpananClasses = new ArrayList<PenyimpananClass>();
 
+//        penyimpananClasses.add(new PenyimpananClass(1, "Dompet", 10000));
+//        for (int i = 0; i<50; i++){
+//            penyimpananClasses.add(new PenyimpananClass(1, "Dompet", 10000));
+//        }
+
         penyimpananClasses = controller.getDataPenyimpanan();
 
-        adapter = new MyRecyclerViewClickRefreshAdapter(getApplicationContext(), penyimpananClasses);
+        adapter = new PenyimpananMyRecyclerViewAdapter(getApplicationContext(), penyimpananClasses);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(manager);
         recyclerView.setHasFixedSize(true);

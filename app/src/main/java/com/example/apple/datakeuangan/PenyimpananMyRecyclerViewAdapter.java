@@ -7,10 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class MyRecyclerViewClickRefreshAdapter extends RecyclerView.Adapter<MyRecyclerViewClickRefreshAdapter.ViewHolder> {
+public class PenyimpananMyRecyclerViewAdapter extends RecyclerView.Adapter<PenyimpananMyRecyclerViewAdapter.ViewHolder> {
 
     private List<PenyimpananClass> mData;
     private ItemClickListener mClickListener;
@@ -28,7 +27,7 @@ public class MyRecyclerViewClickRefreshAdapter extends RecyclerView.Adapter<MyRe
     }
 
     // data is passed into the constructor
-    MyRecyclerViewClickRefreshAdapter(Context context, List<PenyimpananClass> data) {
+    PenyimpananMyRecyclerViewAdapter(Context context, List<PenyimpananClass> data) {
         this.ctx = context;
         this.mData = data;
     }
@@ -111,7 +110,7 @@ public class MyRecyclerViewClickRefreshAdapter extends RecyclerView.Adapter<MyRe
 //    }
 //
 //    // data is passed into the constructor
-//    MyRecyclerViewClickRefreshAdapter(Context context, ArrayList<PenyimpananClass> data) {
+//    PenyimpananMyRecyclerViewAdapter(Context context, ArrayList<PenyimpananClass> data) {
 //        this.ctx = context;
 //        this.mData = data;
 //    }
