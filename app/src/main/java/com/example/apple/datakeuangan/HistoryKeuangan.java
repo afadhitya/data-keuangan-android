@@ -1,9 +1,18 @@
 package com.example.apple.datakeuangan;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,9 +22,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class HistoryKeuangan extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, HistoryMyRecyclerViewAdapter.ItemClickListener {
+
+    final Context c = this;
+    DBControllerHistoryKeuangan controller;
+    private SQLiteDatabase db = null;
+
+    private HistoryMyRecyclerViewAdapter adapter;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,12 +44,53 @@ public class HistoryKeuangan extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerViewHistory);
+        controller = new DBControllerHistoryKeuangan(this, "", null, 1);
+
+        showData();
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
+                View mView = layoutInflaterAndroid.inflate(R.layout.dialog_input_history, null);
+                AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(c);
+                alertDialogBuilderUserInput.setView(mView);
+
+                final EditText keteranganET = (EditText) mView.findViewById(R.id.inputKeteranganHistory);
+                final EditText tanggalET = (EditText) mView.findViewById(R.id.inputTanggalHistory);
+                final EditText hariET = (EditText) mView.findViewById(R.id.inputHariHistory);
+                final EditText jumlahET = (EditText) mView.findViewById(R.id.inputHistoryAmount);
+                final EditText jenisET = (EditText) mView.findViewById(R.id.inputJenisHistory);
+                final EditText dariKeET = (EditText) mView.findViewById(R.id.inputSumberTujuanHistory);
+
+
+                alertDialogBuilderUserInput
+                        .setCancelable(false)
+                        .setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                HistoryKeuanganClass historyTemp = new HistoryKeuanganClass();
+                                historyTemp.setKeteranganHistory(keteranganET.getText().toString());
+                                historyTemp.setTanggalHistory(tanggalET.getText().toString());
+                                historyTemp.setHariHistory(hariET.getText().toString());
+                                historyTemp.setJumlahHistory(Integer.parseInt(jumlahET.getText().toString()));
+                                historyTemp.setMasukAtauKeluar(jenisET.getText().toString());
+                                historyTemp.setIdPenyimpanan(Integer.parseInt(dariKeET.getText().toString()));
+
+                                addHistoryKeDB(historyTemp);
+                            }
+                        })
+
+                        .setNegativeButton("Cancel",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialogBox, int id) {
+                                        dialogBox.cancel();
+                                    }
+                                });
+
+                AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+                alertDialogAndroid.show();
             }
         });
 
@@ -41,6 +102,40 @@ public class HistoryKeuangan extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public void addHistoryKeDB(HistoryKeuanganClass param1){
+        try{
+            controller.insertHistory(param1);
+            Toast.makeText(getApplicationContext(), param1.getKeteranganHistory() + " dan total sebesar "+param1.getJumlahHistory()+" berhasil disimpan",
+                    Toast.LENGTH_LONG).show();
+            adapter.notifyDataSetChanged();
+        }catch(SQLiteException e){
+            Toast.makeText(getApplicationContext(), param1.getKeteranganHistory()  + " dan total sebesar "+param1.getJumlahHistory()+" gagal disimpan",
+                    Toast.LENGTH_LONG).show();
+            Log.e("MYAPP", "exception", e);
+        }
+    }
+
+    public void showData(){
+        ArrayList<HistoryKeuanganClass> historyKeuanganClasses = new ArrayList<HistoryKeuanganClass>();
+
+//        penyimpananClasses.add(new PenyimpananClass(1, "Dompet", 10000));
+//        for (int i = 0; i<50; i++){
+//            penyimpananClasses.add(new PenyimpananClass(1, "Dompet", 10000));
+//        }
+
+        historyKeuanganClasses = controller.getDataHistory();
+
+        adapter = new HistoryMyRecyclerViewAdapter(getApplicationContext(), historyKeuanganClasses);
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setHasFixedSize(true);
+
+
+        recyclerView.setAdapter(adapter);
+        adapter.setClickListener(this);
+
     }
 
     @Override
@@ -108,5 +203,15 @@ public class HistoryKeuangan extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Toast.makeText(this, "You clicked " + adapter.getItem(position).getKeteranganHistory() + " on row number " + position, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

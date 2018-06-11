@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/custom_dialog_layout_design_user_input"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/dialogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Keterangan History"
+        android:textAppearance="?android:attr/textAppearanceLargePopupMenu" />
+
+    <EditText
+        android:id="@+id/inputKeteranganHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Masukan Keterangan History"
+        android:inputType="textCapWords" />
+
+    <TextView
+        android:id="@+id/dialogTitle3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tanggal History"
+        android:textAppearance="?android:attr/textAppearanceLargePopupMenu" />
+
+    <EditText
+        android:id="@+id/inputTanggalHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Masukan Tanggal History"
+        android:inputType="textCapWords" />
+
+    <TextView
+        android:id="@+id/dialogTitle4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hari History"
+        android:textAppearance="?android:attr/textAppearanceLargePopupMenu" />
+
+    <EditText
+        android:id="@+id/inputHariHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Masukan Hari History"
+        android:inputType="textCapWords" />
+
+    <TextView
+        android:id="@+id/dialogTitle2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jumlah Uang"
+        android:textAppearance="?android:attr/textAppearanceLargePopupMenu" />
+
+    <EditText
+        android:id="@+id/inputHistoryAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Masukan Banyakya Hutang "
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/dialogTitle5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jenis History"
+        android:textAppearance="?android:attr/textAppearanceLargePopupMenu" />
+
+    <EditText
+        android:id="@+id/inputJenisHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Masukan Jenis History"
+        android:inputType="textCapWords" />
+
+    <TextView
+        android:id="@+id/dialogTitle6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sumber Atau Tujuan History"
+        android:textAppearance="?android:attr/textAppearanceLargePopupMenu" />
+
+    <EditText
+        android:id="@+id/inputSumberTujuanHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Masukan ID Penyimpanan Sumber / Tujuan Dana"
+        android:inputType="textCapWords" />
+</LinearLayout>
