@@ -83,10 +83,8 @@
         android:text="Sumber Atau Tujuan History"
         android:textAppearance="?android:attr/textAppearanceLargePopupMenu" />
 
-    <EditText
+    <Spinner
         android:id="@+id/inputSumberTujuanHistory"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Masukan ID Penyimpanan Sumber / Tujuan Dana"
-        android:inputType="textCapWords" />
+        android:layout_height="wrap_content" />
 </LinearLayout>

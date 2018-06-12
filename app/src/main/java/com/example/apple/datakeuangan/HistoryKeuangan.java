@@ -23,6 +23,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class HistoryKeuangan extends AppCompatActivity
                 final EditText hariET = (EditText) mView.findViewById(R.id.inputHariHistory);
                 final EditText jumlahET = (EditText) mView.findViewById(R.id.inputHistoryAmount);
                 final EditText jenisET = (EditText) mView.findViewById(R.id.inputJenisHistory);
-                final EditText dariKeET = (EditText) mView.findViewById(R.id.inputSumberTujuanHistory);
+                final Spinner dariKeET = (Spinner) mView.findViewById(R.id.inputSumberTujuanHistory);
 
 
                 alertDialogBuilderUserInput
@@ -76,7 +77,7 @@ public class HistoryKeuangan extends AppCompatActivity
                                 historyTemp.setHariHistory(hariET.getText().toString());
                                 historyTemp.setJumlahHistory(Integer.parseInt(jumlahET.getText().toString()));
                                 historyTemp.setMasukAtauKeluar(jenisET.getText().toString());
-                                historyTemp.setIdPenyimpanan(Integer.parseInt(dariKeET.getText().toString()));
+//                                historyTemp.setIdPenyimpanan(Integer.parseInt(dariKeET.getText().toString()));
 
                                 addHistoryKeDB(historyTemp);
                             }
