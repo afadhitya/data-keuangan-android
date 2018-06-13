@@ -22,21 +22,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class HistoryKeuangan extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, HistoryMyRecyclerViewAdapter.ItemClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, HistoryMyRecyclerViewAdapter.ItemClickListener, AdapterView.OnItemSelectedListener {
 
     final Context c = this;
     DBControllerHistoryKeuangan controller;
+    DBControllerPenyimpanan controllerPenyimpanan;
     private SQLiteDatabase db = null;
 
     private HistoryMyRecyclerViewAdapter adapter;
     RecyclerView recyclerView;
+
+    HashMap<Integer, String> lablesMap;
+    Spinner dariKeS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +55,23 @@ public class HistoryKeuangan extends AppCompatActivity
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewHistory);
         controller = new DBControllerHistoryKeuangan(this, "", null, 1);
+        controllerPenyimpanan = new DBControllerPenyimpanan(this, "", null, 1);
 
         showData();
+
+
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
+        final View mView = layoutInflaterAndroid.inflate(R.layout.dialog_input_history, null);
+        dariKeS = (Spinner) mView.findViewById(R.id.inputSumberTujuanHistory);
+
+        loadSpinnerData();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
-                View mView = layoutInflaterAndroid.inflate(R.layout.dialog_input_history, null);
+
+
                 AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(c);
                 alertDialogBuilderUserInput.setView(mView);
 
@@ -64,7 +80,8 @@ public class HistoryKeuangan extends AppCompatActivity
                 final EditText hariET = (EditText) mView.findViewById(R.id.inputHariHistory);
                 final EditText jumlahET = (EditText) mView.findViewById(R.id.inputHistoryAmount);
                 final EditText jenisET = (EditText) mView.findViewById(R.id.inputJenisHistory);
-                final Spinner dariKeET = (Spinner) mView.findViewById(R.id.inputSumberTujuanHistory);
+
+//                final Spinner dariKeET = (Spinner) mView.findViewById(R.id.inputSumberTujuanHistory);
 
 
                 alertDialogBuilderUserInput
@@ -77,7 +94,7 @@ public class HistoryKeuangan extends AppCompatActivity
                                 historyTemp.setHariHistory(hariET.getText().toString());
                                 historyTemp.setJumlahHistory(Integer.parseInt(jumlahET.getText().toString()));
                                 historyTemp.setMasukAtauKeluar(jenisET.getText().toString());
-//                                historyTemp.setIdPenyimpanan(Integer.parseInt(dariKeET.getText().toString()));
+                                historyTemp.setIdPenyimpanan(Integer.parseInt(lablesMap.get(dariKeS.getSelectedItemPosition())));
 
                                 addHistoryKeDB(historyTemp);
                             }
@@ -138,6 +155,51 @@ public class HistoryKeuangan extends AppCompatActivity
         adapter.setClickListener(this);
 
     }
+
+    private void loadSpinnerData() {
+        ArrayList<PenyimpananClass> penyimpananSpinner = new ArrayList<PenyimpananClass>();
+        // database handler
+        penyimpananSpinner = controllerPenyimpanan.getDataPenyimpanan();
+
+        // Spinner Drop down elements
+        List<String> lables = new ArrayList<>();
+        lablesMap = new HashMap<Integer, String>();
+        for(int i=0;i<penyimpananSpinner.size();i++) {
+             lables.add(penyimpananSpinner.get(i).getNamaPenyimpanan());
+             lablesMap.put(penyimpananSpinner.get(i).getIdPenyimpanan(), penyimpananSpinner.get(i).getNamaPenyimpanan());
+        }
+
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, lables);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter
+                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        dariKeS.setAdapter(dataAdapter);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position,
+                               long id) {
+        // On selecting a spinner item
+        String label = parent.getItemAtPosition(position).toString();
+
+        // Showing selected spinner item
+        Toast.makeText(parent.getContext(), "You selected: " + label,
+                Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+        // TODO Auto-generated method stub
+
+    }
+
 
     @Override
     public void onBackPressed() {
