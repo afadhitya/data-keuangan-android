@@ -94,7 +94,7 @@ public class HistoryKeuangan extends AppCompatActivity
                                 historyTemp.setHariHistory(hariET.getText().toString());
                                 historyTemp.setJumlahHistory(Integer.parseInt(jumlahET.getText().toString()));
                                 historyTemp.setMasukAtauKeluar(jenisET.getText().toString());
-                                historyTemp.setIdPenyimpanan(Integer.parseInt(lablesMap.get(dariKeS.getSelectedItemPosition())));
+                                historyTemp.setIdPenyimpanan(dariKeS.getSelectedItemPosition());
 
                                 addHistoryKeDB(historyTemp);
                             }
@@ -163,10 +163,10 @@ public class HistoryKeuangan extends AppCompatActivity
 
         // Spinner Drop down elements
         List<String> lables = new ArrayList<>();
-        lablesMap = new HashMap<Integer, String>();
+
         for(int i=0;i<penyimpananSpinner.size();i++) {
              lables.add(penyimpananSpinner.get(i).getNamaPenyimpanan());
-             lablesMap.put(penyimpananSpinner.get(i).getIdPenyimpanan(), penyimpananSpinner.get(i).getNamaPenyimpanan());
+
         }
 
 
