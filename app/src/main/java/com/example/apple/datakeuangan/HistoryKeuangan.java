@@ -1,5 +1,7 @@
 package com.example.apple.datakeuangan;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,11 +26,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,6 +49,11 @@ public class HistoryKeuangan extends AppCompatActivity
 
     HashMap<Integer, String> lablesMap;
     Spinner dariKeS;
+    EditText tanggalET;
+
+    private Calendar calendar;
+    private int year, month, day;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +61,12 @@ public class HistoryKeuangan extends AppCompatActivity
         setContentView(R.layout.activity_history_keuangan);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR);
+
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewHistory);
         controller = new DBControllerHistoryKeuangan(this, "", null, 1);
@@ -63,6 +78,7 @@ public class HistoryKeuangan extends AppCompatActivity
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
         final View mView = layoutInflaterAndroid.inflate(R.layout.dialog_input_history, null);
         dariKeS = (Spinner) mView.findViewById(R.id.inputSumberTujuanHistory);
+
 
         loadSpinnerData();
 
@@ -76,10 +92,18 @@ public class HistoryKeuangan extends AppCompatActivity
                 alertDialogBuilderUserInput.setView(mView);
 
                 final EditText keteranganET = (EditText) mView.findViewById(R.id.inputKeteranganHistory);
-                final EditText tanggalET = (EditText) mView.findViewById(R.id.inputTanggalHistory);
+                tanggalET = (EditText) mView.findViewById(R.id.inputTanggalHistory);
                 final EditText hariET = (EditText) mView.findViewById(R.id.inputHariHistory);
                 final EditText jumlahET = (EditText) mView.findViewById(R.id.inputHistoryAmount);
                 final EditText jenisET = (EditText) mView.findViewById(R.id.inputJenisHistory);
+
+                tanggalET.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setDate(v);
+                    }
+
+                });
 
 //                final Spinner dariKeET = (Spinner) mView.findViewById(R.id.inputSumberTujuanHistory);
 
@@ -276,5 +300,40 @@ public class HistoryKeuangan extends AppCompatActivity
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+    public void setDate(View view) {
+        showDialog(999);
+        Toast.makeText(getApplicationContext(), "Date Picker Opened",
+                Toast.LENGTH_SHORT)
+                .show();
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        // TODO Auto-generated method stub
+        if (id == 999) {
+            return new DatePickerDialog(this,
+                    myDateListener, year, month, day);
+        }
+        return null;
+    }
+
+    private DatePickerDialog.OnDateSetListener myDateListener = new
+            DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker arg0,
+                                      int arg1, int arg2, int arg3) {
+                    // TODO Auto-generated method stub
+                    // arg1 = year
+                    // arg2 = month
+                    // arg3 = day
+                    showDate(arg1, arg2+1, arg3);
+                }
+            };
+
+    private void showDate(int year, int month, int day) {
+        tanggalET.setText(new StringBuilder().append(day).append("/")
+                .append(month).append("/").append(year));
     }
 }
