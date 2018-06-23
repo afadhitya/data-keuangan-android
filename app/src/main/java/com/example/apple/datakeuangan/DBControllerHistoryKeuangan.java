@@ -22,6 +22,7 @@ public class DBControllerHistoryKeuangan extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO PENYIMPANAN (NAMA_PENYIMPANAN, ISI_PENYIMPANAN) VALUES ('Dompet', '100000');");
         db.execSQL("INSERT INTO HUTANG (KETERANGAN_HUTANG, ISI_HUTANG) VALUES ('PKM', '25000');");
         db.execSQL("INSERT INTO HISTORY(TANGGAL, HARI, KETERANGAN_HISTORY, JUMLAH_HISTORY, JENIS_HISTORY, ID_PENYIMPANAN) VALUES ('2/6/2018','SABTU','MAKAN','50000','PENGELUARAN','1');");
+        db.execSQL("CREATE VIEW HISTORY_VIEW AS SELECT ID_HISTORY, TANGGAL, HARI, KETERANGAN_HISTORY, JUMLAH_HISTORY, JENIS_HISTORY, H.ID_PENYIMPANAN, NAMA_PENYIMPANAN FROM HISTORY H, PENYIMPANAN P WHERE H.ID_PENYIMPANAN=P.ID_PENYIMPANAN;");
     }
 
     @Override
@@ -49,7 +50,7 @@ public class DBControllerHistoryKeuangan extends SQLiteOpenHelper {
         ArrayList<HistoryKeuanganClass> data = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         StringBuffer stringBuffer = new StringBuffer();
-        Cursor cursor = db.rawQuery("SELECT * FROM HISTORY;", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM HISTORY_VIEW;", null);
         Log.d("TAG", "Tes");
 
 //        cursor.moveToFirst();
@@ -68,6 +69,7 @@ public class DBControllerHistoryKeuangan extends SQLiteOpenHelper {
                     int jumlah = cursor.getInt(cursor.getColumnIndexOrThrow("JUMLAH_HISTORY"));
                     String jenis = cursor.getString(cursor.getColumnIndexOrThrow("JENIS_HISTORY"));
                     int idPenyimpanan = cursor.getInt(cursor.getColumnIndexOrThrow("ID_PENYIMPANAN"));
+                    String namaPenyimpanan = cursor.getString(cursor.getColumnIndexOrThrow("NAMA_PENYIMPANAN"));
 
                     historyKeuanganClass.setIdPenyimpanan(idHistory);
                     historyKeuanganClass.setTanggalHistory(tanggal);
@@ -76,6 +78,7 @@ public class DBControllerHistoryKeuangan extends SQLiteOpenHelper {
                     historyKeuanganClass.setJumlahHistory(jumlah);
                     historyKeuanganClass.setMasukAtauKeluar(jenis);
                     historyKeuanganClass.setIdPenyimpanan(idPenyimpanan);
+                    historyKeuanganClass.setNamaPenyimpanan(namaPenyimpanan);
                     data.add(historyKeuanganClass);
                 }catch(Exception e){
                     Log.e("MY_DEBUG_TAG", "Error " + e.toString());

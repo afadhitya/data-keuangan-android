@@ -49,7 +49,10 @@ public class HistoryKeuangan extends AppCompatActivity
 
     HashMap<Integer, String> lablesMap;
     Spinner dariKeS;
+    ArrayList<PenyimpananClass> penyimpananSpinner;
+
     EditText tanggalET;
+    HistoryKeuanganClass historyTemp;
 
     private Calendar calendar;
     private int year, month, day;
@@ -62,22 +65,26 @@ public class HistoryKeuangan extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //UNTUK CALENDER
         calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
-
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
 
+        //UNTUK RECYCLERVIEWER
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewHistory);
+
         controller = new DBControllerHistoryKeuangan(this, "", null, 1);
         controllerPenyimpanan = new DBControllerPenyimpanan(this, "", null, 1);
 
+        //SHOW DATA HISTORY
         showData();
 
-
+        //UNTUK DIALOG INPUT
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
         final View mView = layoutInflaterAndroid.inflate(R.layout.dialog_input_history, null);
         dariKeS = (Spinner) mView.findViewById(R.id.inputSumberTujuanHistory);
+//        jenisS = (Spinner) mView.findViewById(R.id.)
 
 
         loadSpinnerData();
@@ -105,22 +112,21 @@ public class HistoryKeuangan extends AppCompatActivity
 
                 });
 
-//                final Spinner dariKeET = (Spinner) mView.findViewById(R.id.inputSumberTujuanHistory);
-
-
                 alertDialogBuilderUserInput
                         .setCancelable(false)
                         .setPositiveButton("Send", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialogBox, int id) {
-                                HistoryKeuanganClass historyTemp = new HistoryKeuanganClass();
+                                historyTemp = new HistoryKeuanganClass();
                                 historyTemp.setKeteranganHistory(keteranganET.getText().toString());
                                 historyTemp.setTanggalHistory(tanggalET.getText().toString());
                                 historyTemp.setHariHistory(hariET.getText().toString());
                                 historyTemp.setJumlahHistory(Integer.parseInt(jumlahET.getText().toString()));
                                 historyTemp.setMasukAtauKeluar(jenisET.getText().toString());
-                                historyTemp.setIdPenyimpanan(dariKeS.getSelectedItemPosition());
+                                historyTemp.setIdPenyimpanan(penyimpananSpinner.get(dariKeS.getSelectedItemPosition()).getIdPenyimpanan());
 
                                 addHistoryKeDB(historyTemp);
+
+                                
                             }
                         })
 
@@ -162,11 +168,6 @@ public class HistoryKeuangan extends AppCompatActivity
     public void showData(){
         ArrayList<HistoryKeuanganClass> historyKeuanganClasses = new ArrayList<HistoryKeuanganClass>();
 
-//        penyimpananClasses.add(new PenyimpananClass(1, "Dompet", 10000));
-//        for (int i = 0; i<50; i++){
-//            penyimpananClasses.add(new PenyimpananClass(1, "Dompet", 10000));
-//        }
-
         historyKeuanganClasses = controller.getDataHistory();
 
         adapter = new HistoryMyRecyclerViewAdapter(getApplicationContext(), historyKeuanganClasses);
@@ -181,7 +182,8 @@ public class HistoryKeuangan extends AppCompatActivity
     }
 
     private void loadSpinnerData() {
-        ArrayList<PenyimpananClass> penyimpananSpinner = new ArrayList<PenyimpananClass>();
+        penyimpananSpinner = new ArrayList<PenyimpananClass>();
+
         // database handler
         penyimpananSpinner = controllerPenyimpanan.getDataPenyimpanan();
 
@@ -192,7 +194,6 @@ public class HistoryKeuangan extends AppCompatActivity
              lables.add(penyimpananSpinner.get(i).getNamaPenyimpanan());
 
         }
-
 
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,

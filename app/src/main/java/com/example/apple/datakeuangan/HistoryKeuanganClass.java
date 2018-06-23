@@ -10,6 +10,7 @@ public class HistoryKeuanganClass {
     private String masukAtauKeluar;
     private int jumlahHistory;
     private int idPenyimpanan;
+    private String namaPenyimpanan;
 
     public HistoryKeuanganClass() {
     }
@@ -68,5 +69,13 @@ public class HistoryKeuanganClass {
 
     public void setIdPenyimpanan(int idPenyimpanan) {
         this.idPenyimpanan = idPenyimpanan;
+    }
+
+    public String getNamaPenyimpanan() {
+        return namaPenyimpanan;
+    }
+
+    public void setNamaPenyimpanan(String namaPenyimpanan) {
+        this.namaPenyimpanan = namaPenyimpanan;
     }
 }

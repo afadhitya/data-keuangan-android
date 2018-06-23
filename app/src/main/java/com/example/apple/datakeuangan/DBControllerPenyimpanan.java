@@ -23,6 +23,7 @@ public class DBControllerPenyimpanan extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO PENYIMPANAN (NAMA_PENYIMPANAN, ISI_PENYIMPANAN) VALUES ('Dompet', '100000');");
         db.execSQL("INSERT INTO HUTANG (KETERANGAN_HUTANG, ISI_HUTANG) VALUES ('PKM', '25000');");
         db.execSQL("INSERT INTO HISTORY(TANGGAL, HARI, KETERANGAN_HISTORY, JUMLAH_HISTORY, JENIS_HISTORY, ID_PENYIMPANAN) VALUES ('2/6/2018','SABTU','MAKAN','50000','PENGELUARAN','1');");
+        db.execSQL("CREATE VIEW HISTORY_VIEW AS SELECT ID_HISTORY, TANGGAL, HARI, KETERANGAN_HISTORY, JUMLAH_HISTORY, JENIS_HISTORY, H.ID_PENYIMPANAN, NAMA_PENYIMPANAN FROM HISTORY H, PENYIMPANAN P WHERE H.ID_PENYIMPANAN=P.ID_PENYIMPANAN;");
     }
 
     @Override
@@ -40,6 +41,16 @@ public class DBControllerPenyimpanan extends SQLiteOpenHelper {
 
     public void deletePenyimpanan(int id){
         this.getWritableDatabase().delete("PENYIMPANAN", "ID_PENYIMPANAN='"+id+"'", null);
+    }
+
+    public boolean updateData(String id,String name,int isi) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("ID_PENYIMPANAN",id);
+        contentValues.put("NAMA_PENYIMPANAN",name);
+        contentValues.put("ISI_PENYIMPANAN",isi);
+        db.update("PENYIMPANAN", contentValues, "ID = ?",new String[] { id });
+        return true;
     }
 
     public ArrayList<PenyimpananClass> getDataPenyimpanan(){

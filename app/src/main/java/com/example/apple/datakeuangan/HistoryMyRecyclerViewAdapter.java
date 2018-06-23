@@ -50,7 +50,7 @@ public enum TypeClick {
         holder.keteranganTV.setText(history.getKeteranganHistory());
         holder.banyaknyaTV.setText(Integer.toString(history.getJumlahHistory()));
         holder.jenisTV.setText(history.getMasukAtauKeluar());
-        holder.dariKeManaTV.setText(Integer.toString(history.getIdPenyimpanan()));
+        holder.dariKeManaTV.setText(history.getNamaPenyimpanan());
     }
 
     // total number of rows
