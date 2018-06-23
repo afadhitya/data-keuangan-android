@@ -33,15 +33,43 @@ public class DBControllerHutang extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertHutang(String keterangan, int amount){
+    public long insertHutang(String keterangan, int amount){
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("KETERANGAN_HUTANG", keterangan);
         contentValues.put("ISI_HUTANG", amount);
-        this.getWritableDatabase().insertOrThrow("HUTANG", "", contentValues);
+        long id = db.insert("HUTANG", "", contentValues);
+        db.close();
+        return id;
+//        this.getWritableDatabase().insertOrThrow("HUTANG", "", contentValues);
     }
 
     public void deleteHutang(int id){
         this.getWritableDatabase().delete("HUTANG", "ID_HUTANG='"+id+"'", null);
+    }
+
+    public HutangClass getHutang(int id) {
+        // get readable database as we are not inserting anything
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query("HUTANG",
+                new String[]{"ID_HUTANG", "KETERANGAN_HUTANG", "ISI_HUTANG"},
+                "ID_HUTANG = ?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        // prepare note object
+        HutangClass hutangClass = new HutangClass(
+                cursor.getInt(cursor.getColumnIndex("ID_HUTANG")),
+                cursor.getString(cursor.getColumnIndex("KETERANGAN_HUTANG")),
+                cursor.getInt(cursor.getColumnIndex("ISI_HUTANG")));
+
+        // close the db connection
+        cursor.close();
+
+        return hutangClass;
     }
 
     public ArrayList<HutangClass> getDataHutang(){

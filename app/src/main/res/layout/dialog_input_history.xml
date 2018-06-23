@@ -50,11 +50,12 @@
         android:text="Hari History"
         android:textAppearance="?android:attr/textAppearanceLargePopupMenu" />
 
-    <EditText
+    <Spinner
         android:id="@+id/inputHariHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Masukan Hari History"
+        android:layout_marginBottom="10dp"
         android:inputType="textCapWords" />
 
     <TextView
@@ -64,12 +65,25 @@
         android:text="Jumlah Uang"
         android:textAppearance="?android:attr/textAppearanceLargePopupMenu" />
 
-    <EditText
-        android:id="@+id/inputHistoryAmount"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Masukan Banyakya Hutang "
-        android:inputType="text" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rp "
+            android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
+            />
+        <EditText
+            android:id="@+id/inputHistoryAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Masukan Banyakya Hutang "
+            android:inputType="number" />
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/dialogTitle5"
@@ -78,12 +92,13 @@
         android:text="Jenis History"
         android:textAppearance="?android:attr/textAppearanceLargePopupMenu" />
 
-    <EditText
+    <Spinner
         android:id="@+id/inputJenisHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Masukan Jenis History"
-        android:inputType="textCapWords" />
+        android:layout_marginBottom="10dp"/>
+        <!--android:hint="Masukan Jenis History"-->
+        <!--android:inputType="textCapWords" />-->
 
     <TextView
         android:id="@+id/dialogTitle6"
@@ -95,5 +110,6 @@
     <Spinner
         android:id="@+id/inputSumberTujuanHistory"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"/>
 </LinearLayout>

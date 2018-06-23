@@ -44,8 +44,10 @@ public enum TypeClick {
     @Override
     public void onBindViewHolder(HistoryMyRecyclerViewAdapter.ViewHolder holder, int position) {
         HistoryKeuanganClass history = mData.get(position);
-        holder.idHistoryTV.setText(Integer.toString(history.getIdHistory()));
-        holder.hariTV.setText(history.getHariHistory());
+//        holder.idHistoryTV.setText(Integer.toString(history.getIdHistory()));
+
+        String hariKoma = history.getHariHistory() + ", ";
+        holder.hariTV.setText(hariKoma);
         holder.tanggalTV.setText(history.getTanggalHistory());
         holder.keteranganTV.setText(history.getKeteranganHistory());
         holder.banyaknyaTV.setText(Integer.toString(history.getJumlahHistory()));
@@ -61,7 +63,7 @@ public enum TypeClick {
 
 // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView idHistoryTV;
+//        TextView idHistoryTV;
         TextView hariTV;
         TextView tanggalTV;
         TextView keteranganTV;
@@ -72,7 +74,7 @@ public enum TypeClick {
 
         ViewHolder(View itemView) {
             super(itemView);
-            idHistoryTV = (TextView) itemView.findViewById(R.id.idHistory);
+//            idHistoryTV = (TextView) itemView.findViewById(R.id.idHistory);
             hariTV = (TextView) itemView.findViewById(R.id.hariHistory);
             tanggalTV = (TextView) itemView.findViewById(R.id.tanggalHistory);
             keteranganTV = (TextView) itemView.findViewById(R.id.keteranganHistory);
@@ -80,7 +82,7 @@ public enum TypeClick {
             jenisTV = (TextView) itemView.findViewById(R.id.jenisHistory);
             dariKeManaTV = (TextView) itemView.findViewById(R.id.dariKeMana);
             itemView.setOnClickListener(this);//event click untuk view
-            idHistoryTV.setOnClickListener(this);//
+            hariTV.setOnClickListener(this);//
         }
 
         @Override

@@ -25,6 +25,8 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.apple.datakeuangan.RecyclerTouchListener;
+
 import java.util.ArrayList;
 
 public class Hutang extends AppCompatActivity
@@ -35,6 +37,7 @@ public class Hutang extends AppCompatActivity
 
     private HutangMyRecyclerViewAdapter adapter;
     RecyclerView recyclerView;
+    ArrayList<HutangClass> hutangClasses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,20 @@ public class Hutang extends AppCompatActivity
         controller = new DBControllerHutang(this, "", null, 1);
 
         showData();
+
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this,
+                recyclerView, new RecyclerTouchListener.ClickListener(){
+
+            @Override
+            public void onClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                showActionsDialog(position);
+            }
+        }));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -97,10 +114,19 @@ public class Hutang extends AppCompatActivity
 
     public void addHutangKeDB(String nama, int amount){
         try{
-            controller.insertHutang(nama, amount);
+            long id = controller.insertHutang(nama, amount);
             Toast.makeText(getApplicationContext(), nama + " dan total sebesar "+amount+" berhasil disimpan",
                     Toast.LENGTH_LONG).show();
-            adapter.notifyDataSetChanged();
+            HutangClass hutangClass = controller.getHutang((int)id);
+            if (hutangClass != null) {
+                // adding new note to array list at 0 position
+                hutangClasses.add(hutangClass);
+
+                // refreshing the list
+                adapter.notifyDataSetChanged();
+
+//                toggleEmptyNotes();
+            }
         }catch(SQLiteException e){
             Toast.makeText(getApplicationContext(), nama + " dan total sebesar "+amount+" gagal disimpan",
                     Toast.LENGTH_LONG).show();
@@ -109,7 +135,7 @@ public class Hutang extends AppCompatActivity
     }
 
     public void showData(){
-        ArrayList<HutangClass> hutangClasses = new ArrayList<HutangClass>();
+        hutangClasses = new ArrayList<HutangClass>();
 
 //        penyimpananClasses.add(new PenyimpananClass(1, "Dompet", 10000));
 //        for (int i = 0; i<50; i++){
@@ -199,5 +225,31 @@ public class Hutang extends AppCompatActivity
     @Override
     public void onItemClick(View view, int position) {
         Toast.makeText(this, "You clicked " + adapter.getItem(position).getKeteranganHutang() + " on row number " + position, Toast.LENGTH_SHORT).show();
+    }
+
+    private void deleteHutang(int position){
+        // deleting the note from db
+        controller.deleteHutang(hutangClasses.get(position).getIdHutang());
+
+        // removing the note from the list
+        hutangClasses.remove(position);
+        adapter.notifyItemRemoved(position);
+    }
+    private void showActionsDialog(final int position) {
+        CharSequence colors[] = new CharSequence[]{"Delete"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose option");
+        builder.setItems(colors, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                    deleteHutang(position);
+                } else {
+
+                }
+            }
+        });
+        builder.show();
     }
 }

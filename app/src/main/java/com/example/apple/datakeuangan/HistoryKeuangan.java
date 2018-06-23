@@ -49,7 +49,11 @@ public class HistoryKeuangan extends AppCompatActivity
 
     HashMap<Integer, String> lablesMap;
     Spinner dariKeS;
+    Spinner jenisS;
+    Spinner hariS;
     ArrayList<PenyimpananClass> penyimpananSpinner;
+    List<String> lablesJenis;
+    List<String> lablesHari;
 
     EditText tanggalET;
     HistoryKeuanganClass historyTemp;
@@ -84,10 +88,13 @@ public class HistoryKeuangan extends AppCompatActivity
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
         final View mView = layoutInflaterAndroid.inflate(R.layout.dialog_input_history, null);
         dariKeS = (Spinner) mView.findViewById(R.id.inputSumberTujuanHistory);
-//        jenisS = (Spinner) mView.findViewById(R.id.)
+        jenisS = (Spinner) mView.findViewById(R.id.inputJenisHistory);
+        hariS = (Spinner) mView.findViewById(R.id.inputHariHistory);
 
 
         loadSpinnerData();
+        loadSpinnerDataJenis();
+        loadSpinnerDataHari();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -100,9 +107,7 @@ public class HistoryKeuangan extends AppCompatActivity
 
                 final EditText keteranganET = (EditText) mView.findViewById(R.id.inputKeteranganHistory);
                 tanggalET = (EditText) mView.findViewById(R.id.inputTanggalHistory);
-                final EditText hariET = (EditText) mView.findViewById(R.id.inputHariHistory);
                 final EditText jumlahET = (EditText) mView.findViewById(R.id.inputHistoryAmount);
-                final EditText jenisET = (EditText) mView.findViewById(R.id.inputJenisHistory);
 
                 tanggalET.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -114,18 +119,28 @@ public class HistoryKeuangan extends AppCompatActivity
 
                 alertDialogBuilderUserInput
                         .setCancelable(false)
-                        .setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialogBox, int id) {
                                 historyTemp = new HistoryKeuanganClass();
                                 historyTemp.setKeteranganHistory(keteranganET.getText().toString());
                                 historyTemp.setTanggalHistory(tanggalET.getText().toString());
-                                historyTemp.setHariHistory(hariET.getText().toString());
+                                historyTemp.setHariHistory(lablesHari.get(hariS.getSelectedItemPosition()));
                                 historyTemp.setJumlahHistory(Integer.parseInt(jumlahET.getText().toString()));
-                                historyTemp.setMasukAtauKeluar(jenisET.getText().toString());
+                                historyTemp.setMasukAtauKeluar(lablesJenis.get(jenisS.getSelectedItemPosition()));
                                 historyTemp.setIdPenyimpanan(penyimpananSpinner.get(dariKeS.getSelectedItemPosition()).getIdPenyimpanan());
 
                                 addHistoryKeDB(historyTemp);
+                                PenyimpananClass penyimpananClass = new PenyimpananClass();
+                                penyimpananClass = controllerPenyimpanan.getPenyimpanan(historyTemp.getIdPenyimpanan());
+                                int uangSekarang = penyimpananClass.getIsiPenyimpanan();
 
+                                if(historyTemp.getMasukAtauKeluar().equals("Pengeluaran")) {
+                                    uangSekarang = uangSekarang - historyTemp.getJumlahHistory();
+                                }else{//if pemasukan
+                                    uangSekarang = uangSekarang + historyTemp.getJumlahHistory();
+                                }
+
+                                controllerPenyimpanan.updateData(historyTemp.getIdPenyimpanan(), uangSekarang);
                                 
                             }
                         })
@@ -205,6 +220,51 @@ public class HistoryKeuangan extends AppCompatActivity
 
         // attaching data adapter to spinner
         dariKeS.setAdapter(dataAdapter);
+    }
+
+    private void loadSpinnerDataJenis() {
+
+        // Spinner Drop down elements
+        lablesJenis = new ArrayList<>();
+
+        lablesJenis.add("Pemasukan");
+        lablesJenis.add("Pengeluaran");
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, lablesJenis);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter
+                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        jenisS.setAdapter(dataAdapter);
+    }
+
+    private void loadSpinnerDataHari() {
+
+        // Spinner Drop down elements
+        lablesHari = new ArrayList<>();
+
+        lablesHari.add("Senin");
+        lablesHari.add("Selasa");
+        lablesHari.add("Rabu");
+        lablesHari.add("Kamis");
+        lablesHari.add("Jumat");
+        lablesHari.add("Sabtu");
+        lablesHari.add("Minggu");
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, lablesHari);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter
+                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        hariS.setAdapter(dataAdapter);
     }
 
     @Override

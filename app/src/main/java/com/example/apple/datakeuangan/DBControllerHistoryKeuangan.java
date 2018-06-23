@@ -50,7 +50,7 @@ public class DBControllerHistoryKeuangan extends SQLiteOpenHelper {
         ArrayList<HistoryKeuanganClass> data = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         StringBuffer stringBuffer = new StringBuffer();
-        Cursor cursor = db.rawQuery("SELECT * FROM HISTORY_VIEW;", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM HISTORY_VIEW ORDER BY TANGGAL DESC, ID_HISTORY DESC;", null);
         Log.d("TAG", "Tes");
 
 //        cursor.moveToFirst();
@@ -71,7 +71,7 @@ public class DBControllerHistoryKeuangan extends SQLiteOpenHelper {
                     int idPenyimpanan = cursor.getInt(cursor.getColumnIndexOrThrow("ID_PENYIMPANAN"));
                     String namaPenyimpanan = cursor.getString(cursor.getColumnIndexOrThrow("NAMA_PENYIMPANAN"));
 
-                    historyKeuanganClass.setIdPenyimpanan(idHistory);
+                    historyKeuanganClass.setIdHistory(idHistory);
                     historyKeuanganClass.setTanggalHistory(tanggal);
                     historyKeuanganClass.setHariHistory(hari);
                     historyKeuanganClass.setKeteranganHistory(keterangan);

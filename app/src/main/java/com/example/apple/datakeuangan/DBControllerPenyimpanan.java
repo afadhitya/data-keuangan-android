@@ -43,14 +43,39 @@ public class DBControllerPenyimpanan extends SQLiteOpenHelper {
         this.getWritableDatabase().delete("PENYIMPANAN", "ID_PENYIMPANAN='"+id+"'", null);
     }
 
-    public boolean updateData(String id,String name,int isi) {
+    public boolean updateData(int id, int isi) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("ID_PENYIMPANAN",id);
-        contentValues.put("NAMA_PENYIMPANAN",name);
+        String idStr = Integer.toString(id);
+//        contentValues.put("ID_PENYIMPANAN",id);
+//        contentValues.put("NAMA_PENYIMPANAN",name);
         contentValues.put("ISI_PENYIMPANAN",isi);
-        db.update("PENYIMPANAN", contentValues, "ID = ?",new String[] { id });
+        db.update("PENYIMPANAN", contentValues, "ID_PENYIMPANAN = ?",new String[] { idStr });
         return true;
+    }
+
+    public PenyimpananClass getPenyimpanan(int id) {
+        // get readable database as we are not inserting anything
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query("PENYIMPANAN",
+                new String[]{"ID_PENYIMPANAN", "NAMA_PENYIMPANAN", "ISI_PENYIMPANAN"},
+                "ID_PENYIMPANAN = ?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        // prepare note object
+        PenyimpananClass penyimpananClass = new PenyimpananClass(
+                cursor.getInt(cursor.getColumnIndex("ID_PENYIMPANAN")),
+                cursor.getString(cursor.getColumnIndex("NAMA_PENYIMPANAN")),
+                cursor.getInt(cursor.getColumnIndex("ISI_PENYIMPANAN")));
+
+        // close the db connection
+        cursor.close();
+
+        return penyimpananClass;
     }
 
     public ArrayList<PenyimpananClass> getDataPenyimpanan(){
