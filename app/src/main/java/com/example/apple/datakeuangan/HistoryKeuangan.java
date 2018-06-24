@@ -57,6 +57,7 @@ public class HistoryKeuangan extends AppCompatActivity
 
     EditText tanggalET;
     HistoryKeuanganClass historyTemp;
+    ArrayList<HistoryKeuanganClass> historyKeuanganClasses;
 
     private Calendar calendar;
     private int year, month, day;
@@ -95,6 +96,20 @@ public class HistoryKeuangan extends AppCompatActivity
         loadSpinnerData();
         loadSpinnerDataJenis();
         loadSpinnerDataHari();
+
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this,
+                recyclerView, new RecyclerTouchListener.ClickListener(){
+
+            @Override
+            public void onClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                showActionsDialog(position);
+            }
+        }));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -181,7 +196,7 @@ public class HistoryKeuangan extends AppCompatActivity
     }
 
     public void showData(){
-        ArrayList<HistoryKeuanganClass> historyKeuanganClasses = new ArrayList<HistoryKeuanganClass>();
+        historyKeuanganClasses = new ArrayList<HistoryKeuanganClass>();
 
         historyKeuanganClasses = controller.getDataHistory();
 
@@ -396,5 +411,46 @@ public class HistoryKeuangan extends AppCompatActivity
     private void showDate(int year, int month, int day) {
         tanggalET.setText(new StringBuilder().append(day).append("/")
                 .append(month).append("/").append(year));
+    }
+
+    private void deleteHistory(int position){
+        // deleting the note from db
+        controller.deleteHistory(historyKeuanganClasses.get(position).getIdHistory());
+
+        // tambah atau kurangi ke penyimpanan
+        int idPenyimpananDel = historyKeuanganClasses.get(position).getIdPenyimpanan();
+        PenyimpananClass penyimpananClassDel = new PenyimpananClass();
+        penyimpananClassDel = controllerPenyimpanan.getPenyimpanan(idPenyimpananDel);
+        int uangReset;
+
+        if (historyKeuanganClasses.get(position).getMasukAtauKeluar().equals("Pemasukan")){
+            uangReset = penyimpananClassDel.getIsiPenyimpanan() - historyKeuanganClasses.get(position).getJumlahHistory();
+        }else{
+            uangReset = penyimpananClassDel.getIsiPenyimpanan() + historyKeuanganClasses.get(position).getJumlahHistory();
+        }
+
+        controllerPenyimpanan.updateData(idPenyimpananDel, uangReset);
+
+        // removing the note from the list
+        historyKeuanganClasses.remove(position);
+        adapter.notifyItemRemoved(position);
+    }
+
+    private void showActionsDialog(final int position) {
+        CharSequence colors[] = new CharSequence[]{"Delete"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose option");
+        builder.setItems(colors, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                    deleteHistory(position);
+                } else {
+
+                }
+            }
+        });
+        builder.show();
     }
 }

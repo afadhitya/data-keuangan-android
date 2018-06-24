@@ -42,8 +42,8 @@ public class DBControllerHistoryKeuangan extends SQLiteOpenHelper {
         this.getWritableDatabase().insertOrThrow("HISTORY", "", contentValues);
     }
 
-    public void deletePenyimpanan(int id){
-        this.getWritableDatabase().delete("PENYIMPANAN", "ID_PENYIMPANAN='"+id+"'", null);
+    public void deleteHistory(int id){
+        this.getWritableDatabase().delete("HISTORY", "ID_HISTORY='"+id+"'", null);
     }
 
     public ArrayList<HistoryKeuanganClass> getDataHistory(){

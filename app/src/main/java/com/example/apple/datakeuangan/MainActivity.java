@@ -13,10 +13,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    TextView totalKotorTV;
+    TextView totalHutangTV;
+    TextView totalBersihTV;
+
+    DBControllerPenyimpanan dbPenyimpanan;
+    DBControllerHutang dbHutang;
+
+    ArrayList<PenyimpananClass> penyimpananClasses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +35,12 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        dbPenyimpanan= new DBControllerPenyimpanan(this, "", null, 1);
+
+        totalKotorTV = (TextView) findViewById(R.id.uangTotalHome);
+        totalHutangTV = (TextView) findViewById(R.id.hutangTotalHome);
+        totalBersihTV = (TextView) findViewById(R.id.totalBersihHome);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -34,6 +51,12 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        int total = getTotalKotor();
+
+        totalKotorTV.setText(Integer.toString(total));
+
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -42,6 +65,19 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private int getTotalKotor(){
+        int total = 0;
+        penyimpananClasses = new ArrayList<PenyimpananClass>();
+
+        penyimpananClasses = dbPenyimpanan.getDataPenyimpanan();
+
+        for(int i = 0; i < penyimpananClasses.size(); i++){
+            total = total + penyimpananClasses.get(i).getIsiPenyimpanan();
+        }
+
+        return total;
     }
 
     @Override
@@ -84,32 +120,12 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) { //Home
             // Kosongin
-            // Handle the camera action
-//            setTitle("Data Keuangan");
-
-//            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//            fab.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Snackbar.make(view, "Replace with your own action for Home", Snackbar.LENGTH_LONG)
-//                            .setAction("Action", null).show();
-//                }
-//            });
 
         } else if (id == R.id.nav_penyimpanan) { //Penyimpanan
             Intent intent = new Intent(MainActivity.this, Penyimpanan.class);
             startActivity(intent);
             finish();
-            //setTitle("Penyimpanan");
-
-//            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//            fab.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Snackbar.make(view, "Replace with your own action for Penyimpanan", Snackbar.LENGTH_LONG)
-//                            .setAction("Action", null).show();
-//                }
-//            });
+//
 
         } else if (id == R.id.nav_hutang) { //Hutang
             Intent intent = new Intent(MainActivity.this, Hutang.class);
