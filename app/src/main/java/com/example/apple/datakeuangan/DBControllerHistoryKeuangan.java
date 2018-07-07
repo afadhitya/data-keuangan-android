@@ -31,7 +31,8 @@ public class DBControllerHistoryKeuangan extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertHistory(HistoryKeuanganClass historyKeuanganClass){
+    public long insertHistory(HistoryKeuanganClass historyKeuanganClass){
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("TANGGAL", historyKeuanganClass.getTanggalHistory());
         contentValues.put("HARI", historyKeuanganClass.getHariHistory());
@@ -39,11 +40,42 @@ public class DBControllerHistoryKeuangan extends SQLiteOpenHelper {
         contentValues.put("JUMLAH_HISTORY", historyKeuanganClass.getJumlahHistory());
         contentValues.put("JENIS_HISTORY", historyKeuanganClass.getMasukAtauKeluar());
         contentValues.put("ID_PENYIMPANAN", historyKeuanganClass.getIdPenyimpanan());
-        this.getWritableDatabase().insertOrThrow("HISTORY", "", contentValues);
+        long id = db.insert("HISTORY", "", contentValues);
+        db.close();
+        return id;
     }
 
     public void deleteHistory(int id){
         this.getWritableDatabase().delete("HISTORY", "ID_HISTORY='"+id+"'", null);
+    }
+
+    public HistoryKeuanganClass getHistory(int id) {
+        // get readable database as we are not inserting anything
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query("HISTORY_VIEW",
+                new String[]{"ID_HISTORY", "TANGGAL", "HARI", "KETERANGAN_HISTORY", "JUMLAH_HISTORY", "JENIS_HISTORY", "ID_PENYIMPANAN", "NAMA_PENYIMPANAN"},
+                "ID_HISTORY = ?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        // prepare note object
+        HistoryKeuanganClass historyKeuanganClass = new HistoryKeuanganClass(
+                cursor.getInt(cursor.getColumnIndex("ID_HISTORY")),
+                cursor.getString(cursor.getColumnIndex("TANGGAL")),
+                cursor.getString(cursor.getColumnIndex("HARI")),
+                cursor.getString(cursor.getColumnIndex("KETERANGAN_HISTORY")),
+                cursor.getString(cursor.getColumnIndex("JENIS_HISTORY")),
+                cursor.getInt(cursor.getColumnIndex("JUMLAH_HISTORY")),
+                cursor.getInt(cursor.getColumnIndex("ID_PENYIMPANAN")),
+                cursor.getString(cursor.getColumnIndex("NAMA_PENYIMPANAN")));
+
+        // close the db connection
+        cursor.close();
+
+        return historyKeuanganClass;
     }
 
     public ArrayList<HistoryKeuanganClass> getDataHistory(){

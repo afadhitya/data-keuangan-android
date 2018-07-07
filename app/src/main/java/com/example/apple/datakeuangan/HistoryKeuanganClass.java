@@ -15,6 +15,17 @@ public class HistoryKeuanganClass {
     public HistoryKeuanganClass() {
     }
 
+    public HistoryKeuanganClass(int idHistory, String tanggalHistory, String hariHistory, String keteranganHistory, String masukAtauKeluar, int jumlahHistory, int idPenyimpanan, String namaPenyimpanan) {
+        this.idHistory = idHistory;
+        this.tanggalHistory = tanggalHistory;
+        this.hariHistory = hariHistory;
+        this.keteranganHistory = keteranganHistory;
+        this.masukAtauKeluar = masukAtauKeluar;
+        this.jumlahHistory = jumlahHistory;
+        this.idPenyimpanan = idPenyimpanan;
+        this.namaPenyimpanan = namaPenyimpanan;
+    }
+
     public int getIdHistory() {
         return idHistory;
     }

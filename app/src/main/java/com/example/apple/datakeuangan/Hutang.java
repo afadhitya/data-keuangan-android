@@ -86,6 +86,7 @@ public class Hutang extends AppCompatActivity
                                 String banyaknyaHutang = EditinputHutangAmount.getText().toString();
 
                                 int banyaknyaHutangInt =  Integer.parseInt(banyaknyaHutang);
+
                                 addHutangKeDB(keteranganHutang, banyaknyaHutangInt);
                             }
                         })

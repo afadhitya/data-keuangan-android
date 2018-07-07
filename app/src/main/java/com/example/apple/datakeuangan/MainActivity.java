@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity
     DBControllerHutang dbHutang;
 
     ArrayList<PenyimpananClass> penyimpananClasses;
+    ArrayList<HutangClass> hutangClasses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         dbPenyimpanan= new DBControllerPenyimpanan(this, "", null, 1);
+        dbHutang= new DBControllerHutang(this, "", null, 1);
 
         totalKotorTV = (TextView) findViewById(R.id.uangTotalHome);
         totalHutangTV = (TextView) findViewById(R.id.hutangTotalHome);
@@ -52,8 +54,12 @@ public class MainActivity extends AppCompatActivity
         });
 
         int total = getTotalKotor();
+        int totalHutang = getHutang();
+        int uangBersih = total - totalHutang;
 
         totalKotorTV.setText(Integer.toString(total));
+        totalHutangTV.setText(Integer.toString(totalHutang));
+        totalBersihTV.setText(Integer.toString(uangBersih));
 
 
 
@@ -78,6 +84,17 @@ public class MainActivity extends AppCompatActivity
         }
 
         return total;
+    }
+    private int getHutang(){
+        int totalHutang = 0;
+        hutangClasses = new ArrayList<HutangClass>();
+        hutangClasses = dbHutang.getDataHutang();
+
+        for(int i = 0; i < hutangClasses.size(); i++){
+            totalHutang = totalHutang + hutangClasses.get(i).getJumlahHutang();
+        }
+
+        return totalHutang;
     }
 
     @Override

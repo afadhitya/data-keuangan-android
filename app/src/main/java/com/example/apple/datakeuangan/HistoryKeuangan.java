@@ -184,10 +184,18 @@ public class HistoryKeuangan extends AppCompatActivity
 
     public void addHistoryKeDB(HistoryKeuanganClass param1){
         try{
-            controller.insertHistory(param1);
+            long id = controller.insertHistory(param1);
             Toast.makeText(getApplicationContext(), param1.getKeteranganHistory() + " dan total sebesar "+param1.getJumlahHistory()+" berhasil disimpan",
                     Toast.LENGTH_LONG).show();
-            adapter.notifyDataSetChanged();
+            HistoryKeuanganClass historyKeuanganClass = controller.getHistory((int)id);
+            if(historyKeuanganClass != null){
+                // adding new note to array list at 0 position
+                historyKeuanganClasses.add(0, historyKeuanganClass);
+
+                // refreshing the list
+                adapter.notifyDataSetChanged();
+            }
+
         }catch(SQLiteException e){
             Toast.makeText(getApplicationContext(), param1.getKeteranganHistory()  + " dan total sebesar "+param1.getJumlahHistory()+" gagal disimpan",
                     Toast.LENGTH_LONG).show();
