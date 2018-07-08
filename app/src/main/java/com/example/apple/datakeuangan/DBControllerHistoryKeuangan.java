@@ -18,11 +18,11 @@ public class DBControllerHistoryKeuangan extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db){
         db.execSQL("CREATE TABLE PENYIMPANAN (ID_PENYIMPANAN INTEGER PRIMARY KEY AUTOINCREMENT, NAMA_PENYIMPANAN TEXT, ISI_PENYIMPANAN INTEGER);");
         db.execSQL("CREATE TABLE HUTANG (ID_HUTANG INTEGER PRIMARY KEY AUTOINCREMENT, KETERANGAN_HUTANG TEXT, ISI_HUTANG INTEGER);");
-        db.execSQL("CREATE TABLE HISTORY (ID_HISTORY INTEGER PRIMARY KEY AUTOINCREMENT, TANGGAL TEXT, HARI TEXT, KETERANGAN_HISTORY TEXT, JUMLAH_HISTORY INTEGER, JENIS_HISTORY TEXT, ID_PENYIMPANAN INTEGER, FOREIGN KEY(ID_PENYIMPANAN) REFERENCES PENYIMPANAN(ID_PENYIMPANAN));");
+        db.execSQL("CREATE TABLE HISTORY (ID_HISTORY INTEGER PRIMARY KEY AUTOINCREMENT, TANGGAL TEXT, HARI TEXT, KETERANGAN_HISTORY TEXT, JUMLAH_HISTORY INTEGER, JENIS_HISTORY TEXT, ID_PENYIMPANAN INTEGER, TEMPAT TEXT, FOREIGN KEY(ID_PENYIMPANAN) REFERENCES PENYIMPANAN(ID_PENYIMPANAN));");
         db.execSQL("INSERT INTO PENYIMPANAN (NAMA_PENYIMPANAN, ISI_PENYIMPANAN) VALUES ('Dompet', '100000');");
         db.execSQL("INSERT INTO HUTANG (KETERANGAN_HUTANG, ISI_HUTANG) VALUES ('PKM', '25000');");
         db.execSQL("INSERT INTO HISTORY(TANGGAL, HARI, KETERANGAN_HISTORY, JUMLAH_HISTORY, JENIS_HISTORY, ID_PENYIMPANAN) VALUES ('2/6/2018','SABTU','MAKAN','50000','PENGELUARAN','1');");
-        db.execSQL("CREATE VIEW HISTORY_VIEW AS SELECT ID_HISTORY, TANGGAL, HARI, KETERANGAN_HISTORY, JUMLAH_HISTORY, JENIS_HISTORY, H.ID_PENYIMPANAN, NAMA_PENYIMPANAN FROM HISTORY H, PENYIMPANAN P WHERE H.ID_PENYIMPANAN=P.ID_PENYIMPANAN;");
+        db.execSQL("CREATE VIEW HISTORY_VIEW AS SELECT ID_HISTORY, TANGGAL, HARI, KETERANGAN_HISTORY, JUMLAH_HISTORY, JENIS_HISTORY, H.ID_PENYIMPANAN, NAMA_PENYIMPANAN, TEMPAT FROM HISTORY H, PENYIMPANAN P WHERE H.ID_PENYIMPANAN=P.ID_PENYIMPANAN;");
     }
 
     @Override
@@ -40,6 +40,7 @@ public class DBControllerHistoryKeuangan extends SQLiteOpenHelper {
         contentValues.put("JUMLAH_HISTORY", historyKeuanganClass.getJumlahHistory());
         contentValues.put("JENIS_HISTORY", historyKeuanganClass.getMasukAtauKeluar());
         contentValues.put("ID_PENYIMPANAN", historyKeuanganClass.getIdPenyimpanan());
+        contentValues.put("TEMPAT", historyKeuanganClass.getTempat());
         long id = db.insert("HISTORY", "", contentValues);
         db.close();
         return id;
@@ -54,7 +55,7 @@ public class DBControllerHistoryKeuangan extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query("HISTORY_VIEW",
-                new String[]{"ID_HISTORY", "TANGGAL", "HARI", "KETERANGAN_HISTORY", "JUMLAH_HISTORY", "JENIS_HISTORY", "ID_PENYIMPANAN", "NAMA_PENYIMPANAN"},
+                new String[]{"ID_HISTORY", "TANGGAL", "HARI", "KETERANGAN_HISTORY", "JUMLAH_HISTORY", "JENIS_HISTORY", "ID_PENYIMPANAN", "NAMA_PENYIMPANAN", "TEMPAT"},
                 "ID_HISTORY = ?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -70,7 +71,8 @@ public class DBControllerHistoryKeuangan extends SQLiteOpenHelper {
                 cursor.getString(cursor.getColumnIndex("JENIS_HISTORY")),
                 cursor.getInt(cursor.getColumnIndex("JUMLAH_HISTORY")),
                 cursor.getInt(cursor.getColumnIndex("ID_PENYIMPANAN")),
-                cursor.getString(cursor.getColumnIndex("NAMA_PENYIMPANAN")));
+                cursor.getString(cursor.getColumnIndex("NAMA_PENYIMPANAN")),
+                cursor.getString(cursor.getColumnIndex("TEMPAT")));
 
         // close the db connection
         cursor.close();
@@ -102,6 +104,7 @@ public class DBControllerHistoryKeuangan extends SQLiteOpenHelper {
                     String jenis = cursor.getString(cursor.getColumnIndexOrThrow("JENIS_HISTORY"));
                     int idPenyimpanan = cursor.getInt(cursor.getColumnIndexOrThrow("ID_PENYIMPANAN"));
                     String namaPenyimpanan = cursor.getString(cursor.getColumnIndexOrThrow("NAMA_PENYIMPANAN"));
+                    String tempat = cursor.getString(cursor.getColumnIndexOrThrow("TEMPAT"));
 
                     historyKeuanganClass.setIdHistory(idHistory);
                     historyKeuanganClass.setTanggalHistory(tanggal);
@@ -111,6 +114,7 @@ public class DBControllerHistoryKeuangan extends SQLiteOpenHelper {
                     historyKeuanganClass.setMasukAtauKeluar(jenis);
                     historyKeuanganClass.setIdPenyimpanan(idPenyimpanan);
                     historyKeuanganClass.setNamaPenyimpanan(namaPenyimpanan);
+                    historyKeuanganClass.setTempat(tempat);
                     data.add(historyKeuanganClass);
                 }catch(Exception e){
                     Log.e("MY_DEBUG_TAG", "Error " + e.toString());

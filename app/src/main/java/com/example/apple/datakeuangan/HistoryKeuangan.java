@@ -56,6 +56,7 @@ public class HistoryKeuangan extends AppCompatActivity
     List<String> lablesHari;
 
     EditText tanggalET;
+    EditText tempatET;
     HistoryKeuanganClass historyTemp;
     ArrayList<HistoryKeuanganClass> historyKeuanganClasses;
 
@@ -123,6 +124,7 @@ public class HistoryKeuangan extends AppCompatActivity
                 final EditText keteranganET = (EditText) mView.findViewById(R.id.inputKeteranganHistory);
                 tanggalET = (EditText) mView.findViewById(R.id.inputTanggalHistory);
                 final EditText jumlahET = (EditText) mView.findViewById(R.id.inputHistoryAmount);
+                tempatET = (EditText) mView.findViewById(R.id.inputTempat);
 
                 tanggalET.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -143,8 +145,10 @@ public class HistoryKeuangan extends AppCompatActivity
                                 historyTemp.setJumlahHistory(Integer.parseInt(jumlahET.getText().toString()));
                                 historyTemp.setMasukAtauKeluar(lablesJenis.get(jenisS.getSelectedItemPosition()));
                                 historyTemp.setIdPenyimpanan(penyimpananSpinner.get(dariKeS.getSelectedItemPosition()).getIdPenyimpanan());
+                                historyTemp.setTempat(tempatET.getText().toString());
 
                                 addHistoryKeDB(historyTemp);
+
                                 PenyimpananClass penyimpananClass = new PenyimpananClass();
                                 penyimpananClass = controllerPenyimpanan.getPenyimpanan(historyTemp.getIdPenyimpanan());
                                 int uangSekarang = penyimpananClass.getIsiPenyimpanan();
@@ -444,8 +448,16 @@ public class HistoryKeuangan extends AppCompatActivity
         adapter.notifyItemRemoved(position);
     }
 
+    private void goToMaps(int position){
+        String keyWord = historyKeuanganClasses.get(position).getTempat();
+
+        Intent myIntent = new Intent(this, MapsActivity.class);
+        myIntent.putExtra("keyWord",keyWord);
+        startActivity(myIntent);
+    }
+
     private void showActionsDialog(final int position) {
-        CharSequence colors[] = new CharSequence[]{"Delete"};
+        CharSequence colors[] = new CharSequence[]{"Delete","Maps"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose option");
@@ -455,7 +467,7 @@ public class HistoryKeuangan extends AppCompatActivity
                 if (which == 0) {
                     deleteHistory(position);
                 } else {
-
+                    goToMaps(position);
                 }
             }
         });

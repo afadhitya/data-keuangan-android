@@ -11,11 +11,12 @@ public class HistoryKeuanganClass {
     private int jumlahHistory;
     private int idPenyimpanan;
     private String namaPenyimpanan;
+    private String tempat;
 
     public HistoryKeuanganClass() {
     }
 
-    public HistoryKeuanganClass(int idHistory, String tanggalHistory, String hariHistory, String keteranganHistory, String masukAtauKeluar, int jumlahHistory, int idPenyimpanan, String namaPenyimpanan) {
+    public HistoryKeuanganClass(int idHistory, String tanggalHistory, String hariHistory, String keteranganHistory, String masukAtauKeluar, int jumlahHistory, int idPenyimpanan, String namaPenyimpanan, String tempat) {
         this.idHistory = idHistory;
         this.tanggalHistory = tanggalHistory;
         this.hariHistory = hariHistory;
@@ -24,6 +25,7 @@ public class HistoryKeuanganClass {
         this.jumlahHistory = jumlahHistory;
         this.idPenyimpanan = idPenyimpanan;
         this.namaPenyimpanan = namaPenyimpanan;
+        this.tempat = tempat;
     }
 
     public int getIdHistory() {
@@ -88,5 +90,13 @@ public class HistoryKeuanganClass {
 
     public void setNamaPenyimpanan(String namaPenyimpanan) {
         this.namaPenyimpanan = namaPenyimpanan;
+    }
+
+    public String getTempat() {
+        return tempat;
+    }
+
+    public void setTempat(String tempat) {
+        this.tempat = tempat;
     }
 }

@@ -53,6 +53,7 @@ public enum TypeClick {
         holder.banyaknyaTV.setText(Integer.toString(history.getJumlahHistory()));
         holder.jenisTV.setText(history.getMasukAtauKeluar());
         holder.dariKeManaTV.setText(history.getNamaPenyimpanan());
+        holder.tempatTV.setText(history.getTempat());
     }
 
     // total number of rows
@@ -70,6 +71,7 @@ public enum TypeClick {
         TextView banyaknyaTV;
         TextView jenisTV;
         TextView dariKeManaTV;
+        TextView tempatTV;
 
 
         ViewHolder(View itemView) {
@@ -81,6 +83,7 @@ public enum TypeClick {
             banyaknyaTV = (TextView) itemView.findViewById(R.id.banyaknyaHistory);
             jenisTV = (TextView) itemView.findViewById(R.id.jenisHistory);
             dariKeManaTV = (TextView) itemView.findViewById(R.id.dariKeMana);
+            tempatTV = (TextView) itemView.findViewById(R.id.tempat);
             itemView.setOnClickListener(this);//event click untuk view
             hariTV.setOnClickListener(this);//
         }
