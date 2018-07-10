@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/custom_dialog_layout_design_user_input"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/dialogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dari Penyimpanan"
+        android:textAppearance="?android:attr/textAppearanceLargePopupMenu" />
+
+    <Spinner
+        android:id="@+id/dariPenyimpanan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:id="@+id/dialogTitle2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ke Pebnyimpanan"
+        android:textAppearance="?android:attr/textAppearanceLargePopupMenu" />
+
+    <Spinner
+        android:id="@+id/kePenyimpanan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:id="@+id/dialogTitle3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jumlah Yang Dipindahkan"
+        android:textAppearance="?android:attr/textAppearanceLargePopupMenu" />
+
+    <EditText
+        android:id="@+id/banyaknya"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Masukan Banyakya  "
+        android:inputType="number" />
+</LinearLayout>
