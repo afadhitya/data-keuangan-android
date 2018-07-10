@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class HutangMyRecyclerViewAdapter extends RecyclerView.Adapter<HutangMyRecyclerViewAdapter.ViewHolder> {
 
@@ -45,7 +47,8 @@ public class HutangMyRecyclerViewAdapter extends RecyclerView.Adapter<HutangMyRe
         HutangClass kamus = mData.get(position);
         holder.myTextIstilah.setText(Integer.toString(kamus.getIdHutang()));
         holder.myTextArti.setText(kamus.getKeteranganHutang());
-        holder.myTextKeterangan.setText(Integer.toString(kamus.getJumlahHutang()));
+        holder.myTextKeterangan.setText(NumberFormat.getNumberInstance(Locale.US).format(kamus.getJumlahHutang()));
+//        holder.myTextKeterangan.setText(Integer.toString(kamus.getJumlahHutang()));
     }
 
     // total number of rows

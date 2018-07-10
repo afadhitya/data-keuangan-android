@@ -15,7 +15,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -44,22 +46,22 @@ public class MainActivity extends AppCompatActivity
         totalHutangTV = (TextView) findViewById(R.id.hutangTotalHome);
         totalBersihTV = (TextView) findViewById(R.id.totalBersihHome);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
         int total = getTotalKotor();
         int totalHutang = getHutang();
         int uangBersih = total - totalHutang;
 
-        totalKotorTV.setText(Integer.toString(total));
-        totalHutangTV.setText(Integer.toString(totalHutang));
-        totalBersihTV.setText(Integer.toString(uangBersih));
+        totalKotorTV.setText(NumberFormat.getNumberInstance(Locale.US).format(total));
+        totalHutangTV.setText(NumberFormat.getNumberInstance(Locale.US).format(totalHutang));
+        totalBersihTV.setText(NumberFormat.getNumberInstance(Locale.US).format(uangBersih));
 
 
 
@@ -156,9 +158,9 @@ public class MainActivity extends AppCompatActivity
             finish();
 //            setTitle("History Keuangan");
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+//        } else if (id == R.id.nav_share) {
+//
+//        } else if (id == R.id.nav_send) {
 
         }
 

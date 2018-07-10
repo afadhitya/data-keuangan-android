@@ -9,7 +9,9 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class HistoryMyRecyclerViewAdapter extends RecyclerView.Adapter<HistoryMyRecyclerViewAdapter.ViewHolder>{
 private List<HistoryKeuanganClass> mData;
@@ -50,7 +52,7 @@ public enum TypeClick {
         holder.hariTV.setText(hariKoma);
         holder.tanggalTV.setText(history.getTanggalHistory());
         holder.keteranganTV.setText(history.getKeteranganHistory());
-        holder.banyaknyaTV.setText(Integer.toString(history.getJumlahHistory()));
+        holder.banyaknyaTV.setText(NumberFormat.getNumberInstance(Locale.US).format(history.getJumlahHistory()));
         holder.jenisTV.setText(history.getMasukAtauKeluar());
         holder.dariKeManaTV.setText(history.getNamaPenyimpanan());
         holder.tempatTV.setText(history.getTempat());

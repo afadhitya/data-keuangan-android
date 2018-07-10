@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class PenyimpananMyRecyclerViewAdapter extends RecyclerView.Adapter<PenyimpananMyRecyclerViewAdapter.ViewHolder> {
 
@@ -45,7 +47,7 @@ public class PenyimpananMyRecyclerViewAdapter extends RecyclerView.Adapter<Penyi
         PenyimpananClass kamus = mData.get(position);
         holder.myTextIstilah.setText(Integer.toString(kamus.getIdPenyimpanan()));
         holder.myTextArti.setText(kamus.getNamaPenyimpanan());
-        holder.myTextKeterangan.setText(Integer.toString(kamus.getIsiPenyimpanan()));
+        holder.myTextKeterangan.setText(NumberFormat.getNumberInstance(Locale.US).format(kamus.getIsiPenyimpanan()));
     }
 
     // total number of rows

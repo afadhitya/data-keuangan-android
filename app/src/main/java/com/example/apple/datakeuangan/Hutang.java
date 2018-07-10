@@ -212,9 +212,9 @@ public class Hutang extends AppCompatActivity
             startActivity(intent);
             finish();
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+//        } else if (id == R.id.nav_share) {
+//
+//        } else if (id == R.id.nav_send) {
 
         }
 

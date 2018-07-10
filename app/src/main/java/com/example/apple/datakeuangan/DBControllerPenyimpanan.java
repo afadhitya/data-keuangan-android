@@ -32,11 +32,14 @@ public class DBControllerPenyimpanan extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertPenyimpanan(String nama, int amount){
+    public long insertPenyimpanan(String nama, int amount){
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("NAMA_PENYIMPANAN", nama);
         contentValues.put("ISI_PENYIMPANAN", amount);
-        this.getWritableDatabase().insertOrThrow("PENYIMPANAN", "", contentValues);
+        long id = db.insert("PENYIMPANAN", "", contentValues);
+        db.close();
+        return id;
     }
 
     public void deletePenyimpanan(int id){

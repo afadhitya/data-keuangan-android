@@ -34,6 +34,7 @@ public class Penyimpanan extends AppCompatActivity
 
     private PenyimpananMyRecyclerViewAdapter adapter;
     RecyclerView recyclerView;
+    ArrayList<PenyimpananClass> penyimpananClasses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,10 +99,17 @@ public class Penyimpanan extends AppCompatActivity
 
     public void addPenyimpananKeDB(String nama, int amount){
         try{
-            controller.insertPenyimpanan(nama, amount);
+            long id = controller.insertPenyimpanan(nama, amount);
             Toast.makeText(getApplicationContext(), nama + " dan total sebesar "+amount+" berhasil disimpan",
                     Toast.LENGTH_LONG).show();
-            adapter.notifyDataSetChanged();
+            PenyimpananClass penyimpananClass = controller.getPenyimpanan((int)id);
+            if (penyimpananClass != null) {
+                // adding new note to array list at 0 position
+                penyimpananClasses.add(penyimpananClass);
+
+                // refreshing the list
+                adapter.notifyDataSetChanged();
+            }
         }catch(SQLiteException e){
             Toast.makeText(getApplicationContext(), nama + " dan total sebesar "+amount+" gagal disimpan",
                     Toast.LENGTH_LONG).show();
@@ -110,7 +118,6 @@ public class Penyimpanan extends AppCompatActivity
     }
 
     public void showData(){
-        ArrayList<PenyimpananClass> penyimpananClasses = new ArrayList<PenyimpananClass>();
 
 //        penyimpananClasses.add(new PenyimpananClass(1, "Dompet", 10000));
 //        for (int i = 0; i<50; i++){
@@ -185,9 +192,9 @@ public class Penyimpanan extends AppCompatActivity
             startActivity(intent);
             finish();
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+//        } else if (id == R.id.nav_share) {
+//
+//        } else if (id == R.id.nav_send) {
 
         }
 
