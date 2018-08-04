@@ -86,17 +86,6 @@ public class HistoryKeuangan extends AppCompatActivity
         //SHOW DATA HISTORY
         showData();
 
-        //UNTUK DIALOG INPUT
-        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
-        final View mView = layoutInflaterAndroid.inflate(R.layout.dialog_input_history, null);
-        dariKeS = (Spinner) mView.findViewById(R.id.inputSumberTujuanHistory);
-        jenisS = (Spinner) mView.findViewById(R.id.inputJenisHistory);
-        hariS = (Spinner) mView.findViewById(R.id.inputHariHistory);
-
-
-        loadSpinnerData();
-        loadSpinnerDataJenis();
-        loadSpinnerDataHari();
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this,
                 recyclerView, new RecyclerTouchListener.ClickListener(){
@@ -116,6 +105,16 @@ public class HistoryKeuangan extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
+                final View mView = layoutInflaterAndroid.inflate(R.layout.dialog_input_history, null);
+                dariKeS = (Spinner) mView.findViewById(R.id.inputSumberTujuanHistory);
+                jenisS = (Spinner) mView.findViewById(R.id.inputJenisHistory);
+                hariS = (Spinner) mView.findViewById(R.id.inputHariHistory);
+
+
+                loadSpinnerData();
+                loadSpinnerDataJenis();
+                loadSpinnerDataHari();
 
 
                 AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(c);
@@ -199,6 +198,8 @@ public class HistoryKeuangan extends AppCompatActivity
                 // refreshing the list
                 adapter.notifyDataSetChanged();
             }
+            Toast.makeText(getApplicationContext(), "History Berhasil Disimpan",
+                    Toast.LENGTH_LONG).show();
 
         }catch(SQLiteException e){
             Toast.makeText(getApplicationContext(), param1.getKeteranganHistory()  + " dan total sebesar "+param1.getJumlahHistory()+" gagal disimpan",
@@ -467,7 +468,13 @@ public class HistoryKeuangan extends AppCompatActivity
                 if (which == 0) {
                     deleteHistory(position);
                 } else {
-                    goToMaps(position);
+                    if(historyKeuanganClasses.get(position).getTempat().equals(""))
+                    {
+                        Toast.makeText(getApplicationContext(), "Tidak Ada Data Tempat",
+                                Toast.LENGTH_LONG).show();
+                    }else {
+                        goToMaps(position);
+                    }
                 }
             }
         });

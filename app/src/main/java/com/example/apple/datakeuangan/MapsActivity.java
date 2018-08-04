@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -68,11 +69,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 e.printStackTrace();
             }
             mMap.clear();
-            Address address = addressList.get(0);
-            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
 
-            mMap.addMarker(new MarkerOptions().position(latLng).title( address.getAddressLine(0)));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17.0f));
+            Address address = null;
+            if(addressList.size() == 0){
+                Toast.makeText(getApplicationContext(), "Tidak Ada Data Tempat Di Google Maps",
+                        Toast.LENGTH_LONG).show();
+                finish();
+
+            }else{
+                address = addressList.get(0);
+                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+
+                mMap.addMarker(new MarkerOptions().position(latLng).title( address.getAddressLine(0)));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17.0f));
+            }
+
         }
     }
 }

@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -167,6 +168,9 @@ public class MainActivity extends AppCompatActivity
         uangKe = uangKe + jumlah;
 
         dbPenyimpanan.updateData(idKe, uangKe);
+
+        Toast.makeText(getApplicationContext(), "Switching Berhasil",
+                Toast.LENGTH_LONG).show();
     }
 
     @Override
